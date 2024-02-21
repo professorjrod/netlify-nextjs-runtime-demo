@@ -1,9 +1,9 @@
 import "@styles/globals.css";
 
-export const revalidate = 3;
+const time = () => fetch("http://worldtimeapi.org/api/ip");
 
 function Application({ Component, pageProps }) {
-  return <p>{Date.now()}</p>;
+  return <p>{time()}</p>;
 }
 
 export default Application;
