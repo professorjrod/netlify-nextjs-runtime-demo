@@ -1,31 +1,33 @@
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import getBlogPosts from "../../get";
 
-const BlogIndex = () => {
-  const [posts, setPosts] = useState([]);
+export const getStaticProps = async (context) => {
+  const data = await getBlogPosts();
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      const response = await fetch("api/blogPosts");
-      const data = await response.json();
-      setPosts(data);
-    };
-
-    fetchPosts();
-  }, []);
-
-  return (
-    <div>
-      <h1>Blog Posts</h1>
-      <ul>
-        {posts.map((post) => (
-          <li key={post.id}>
-            <Link href={`/blog/${post.id}`}>{post.title}</Link>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
+  return {
+    props: {
+      posts: data,
+    },
+  };
 };
 
-export default BlogIndex;
+export default function BlogPosts({ posts }) {
+  return (
+    <>
+      <div>
+        <h1>Blog Posts</h1>
+      </div>
+      <div>
+        {posts.map((post) => {
+          return (
+            <div id={post.id}>
+              <p>{post.title}</p>
+              <p>Author: {post.author}</p>
+              <p>Industry: {post.industry}</p>
+              <p>{post.content}</p>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
